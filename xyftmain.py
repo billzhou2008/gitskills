@@ -8,6 +8,7 @@ from xyftsub import rdUpdate
 from xyftsub import piUpdate
 from xyftsub import GetWaitingTime
 from xyftsub import piLatestDataDisp #zhoumb180723
+from xyftsub import ContinueCheck # added by zhoumb 20200201
 
 import time
 
@@ -24,6 +25,7 @@ if __name__ == "__main__":
             
             if(ballnum > lastballnum):
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
+                ContinueCheck(lastballnum,ballnum,"xyft") # added by zhoumb 20200201
 
             else:
                 firstID = GetLastIDFromTable('xyftrd')
