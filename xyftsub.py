@@ -303,6 +303,69 @@ def GetAndSave(url,lastID):
         return(1)
         #print("从网上获取一天数据写入xyft表成功")
 
+def ContinueCheck(firstID,lastID,tableName):  #连续性检查 zhoumb20200131      
+
+        continueflag = 1
+
+        # 打开数据库连接
+        db = pymysql.connect("localhost","root","zhoumb1202","luckyairship" )
+ 
+        # 使用 cursor() 方法创建一个游标对象 cursor
+        cursor = db.cursor()
+        currentID = firstID
+        trytimes = lastID - firstID
+
+        for i in range(trytimes):
+            
+            #sql = "SELECT ID FROM %s order by ID desc limit 1 "  
+            sql = "select * from %s where id > %d order by id asc limit 1"
+            cursor.execute(sql %(tableName,currentID))  
+            result = cursor.fetchall()
+            for row in result:
+                    nextID = row[0]
+
+            nextcheckID = currentID + 1
+            temp = nextcheckID%1000
+            if temp > 180: 
+                nextcheckID = GetNextDayballnum(currentID)  
+            
+            if(nextID == nextcheckID):
+                continueflag = 1
+            else:
+                continueflag = 0
+                cwn_num = nextcheckID
+                nextID = cwn_num
+                cfirst  = 2
+                csecond = 3
+                cthird = 4
+                cfourth = 5
+                cfifth = 6
+                csixth = 7
+                cseventh = 8
+                ceighth = 9
+                cnineth = 10
+                ctenth = 1
+                insert_data = ("INSERT INTO xyft(ID,F1,S2,T3,F4,F5,S6,S7,E8,N9,T10)"
+                               "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                pk10_data = (cwn_num,cfirst,csecond,cthird,cfourth,cfifth,csixth,cseventh,ceighth,cnineth,ctenth)
+                try:
+                    # 执行sql语句
+                    cursor.execute(insert_data,pk10_data)
+                    # 提交到数据库执行
+                    db.commit()
+                    print("add a lost record", nextID)
+                except:
+                    # 如果发生错误则回滚
+                    db.rollback()
+                    print('数据库更新失败')   
+            print(nextID,continueflag)
+
+            currentID = nextID
+
+        db.close
+
+        return(1)
+        
 def SaveDatatoMysqlbak20191210(ballnum,daynum,today_num,lastballnum):
 
         lastdaynum = lastballnum//1000 #最后一期年月日
