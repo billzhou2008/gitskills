@@ -323,6 +323,11 @@ def ContinueCheck(firstID,lastID,tableName):  #连续性检查 zhoumb20200131
             result = cursor.fetchall()
             for row in result:
                     nextID = row[0]
+            
+            if(nextID == lastID): #最后一个ID检查完成，终止循环 zhoumb20200210
+                    db.close
+                    print("Continue checked",firstID,lastID,tableName)
+                    break
 
             nextcheckID = currentID + 1
             temp = nextcheckID%1000
