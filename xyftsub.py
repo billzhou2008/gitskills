@@ -209,7 +209,7 @@ def SaveDatatoMysql(ballnum,daynum,today_num,lastballnum):
             url += daystr
             url += '&uid=698146&token=1b9699513be7adfd28cc6e6d9a78ed9f87eb95b6'
 
-            print(url)
+            #print(url)
 
             GetAndSave(url,lastID)
 
