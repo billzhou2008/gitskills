@@ -228,8 +228,8 @@ def GetAndSave(url,lastID):
                         html.raise_for_status()
                 except requests.RequestException as e:#处理异常
                         print(e)
-                        print('等1秒')
-                        time.sleep(1)
+                        print('等3秒')
+                        time.sleep(3)
                                 
                 else:
                         soup = BeautifulSoup(html.text,'html.parser')
@@ -247,8 +247,8 @@ def GetAndSave(url,lastID):
                         print(readnums)
                         if readnums == 0:
                             print('Get blank data')
-                            print('等10秒')
-                            time.sleep(10)
+                            print('等30秒')
+                            time.sleep(30)
                         
                         break;
                 else:
