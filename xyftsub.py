@@ -215,7 +215,8 @@ def SaveDatatoMysql(ballnum,daynum,today_num,lastballnum):
 
             if daynum == lastdaynum:
                 break;
-            time.sleep(6)
+            print('等10秒 for next day numbers')
+            time.sleep(10)
 
  
 def GetAndSave(url,lastID):
