@@ -254,8 +254,8 @@ def GetAndSave(url,lastID):
                         break;
                 else:
                         print('Get Data failed')
-                        print('等5秒')
-                        time.sleep(6)
+                        print('等30秒')
+                        time.sleep(30)
 
 
         # 打开数据库连接

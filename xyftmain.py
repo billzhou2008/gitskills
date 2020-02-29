@@ -26,7 +26,7 @@ if __name__ == "__main__":
             if(ballnum > lastballnum):
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
                 numberdiff = ballnum - lastballnum
-                if(numberdiff > 2):
+                if(numberdiff > 3):
                     ContinueCheck(lastballnum,ballnum,"xyft") # added by zhoumb 2020020
             else:
                 firstID = GetLastIDFromTable('xyftrd')
