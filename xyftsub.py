@@ -191,6 +191,8 @@ def DatatoMysqlExe(checkball,daynum,numbers): #add check ball by zhoumb20181022
         db.close
 def SaveDatatoMysql(ballnum,daynum,today_num,lastballnum):
 
+        loop_flag = 0
+
         lastdaynum = lastballnum//1000 #最后一期年月日
         last_num = lastballnum%1000
         daysrange = 365
@@ -211,10 +213,14 @@ def SaveDatatoMysql(ballnum,daynum,today_num,lastballnum):
 
             #print(url)
 
-            GetAndSave(url,lastID)
+            loop_flag = GetAndSave(url,lastID) #zhoumb20200302
 
-            if daynum == lastdaynum:
+            if loop_flag == 1:
+                    print("try previous day, ballnum", ballnum)
+
+            if loop_flag == 2:
                 break;
+            
             print('等10秒 for next day numbers')
             time.sleep(10)
 
@@ -254,8 +260,9 @@ def GetAndSave(url,lastID):
                         break;
                 else:
                         print('Get Data failed')
-                        print('等30秒')
-                        time.sleep(30)
+                        print('等15秒')
+                        time.sleep(15)
+                        return(1) # abnormal process flag zhoumb20200302
 
 
         # 打开数据库连接
@@ -284,6 +291,7 @@ def GetAndSave(url,lastID):
             print(cwn_num,cfirst,csecond,cthird,cfourth,cfifth,csixth,cseventh,ceighth,cnineth,ctenth,ccdate,cctime)        
             if cwn_num == lastID or cwn_num < lastID:
                 print("数据库更新完成") 
+                return(2) # loop finish flag zhoumb20200302
                 break;
             # SQL 插入语句
             insert_data = ("INSERT INTO xyft(ID,F1,S2,T3,F4,F5,S6,S7,E8,N9,T10)"
@@ -301,7 +309,7 @@ def GetAndSave(url,lastID):
 
         db.close
 
-        return(1)
+        return(0)  # normal process zhoumb 20200302
         #print("从网上获取一天数据写入xyft表成功")
 
 def ContinueCheck(firstID,lastID,tableName):  #连续性检查 zhoumb20200131      
