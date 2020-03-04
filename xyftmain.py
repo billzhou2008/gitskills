@@ -26,8 +26,8 @@ if __name__ == "__main__":
             if(ballnum > lastballnum):
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
                 numberdiff = ballnum - lastballnum
-                if(numberdiff > 3):
-                    ContinueCheck(lastballnum,ballnum,"xyft") # added by zhoumb 2020020
+                if(numberdiff > 5):
+                    ContinueCheck(lastballnum,ballnum-1,"xyft") # added by zhoumb 2020020
             else:
                 firstID = GetLastIDFromTable('xyftrd')
                 if(ballnum >firstID):
@@ -37,7 +37,7 @@ if __name__ == "__main__":
                 piUpdate(firstID,ballnum)
 
                 waitingtime = GetWaitingTime()
-                print('%d seconds waiting for new data....' %waitingtime)
+                print('%d seconds waiting for new data....v200301' %waitingtime)
                 time.sleep(waitingtime)        
  
 
