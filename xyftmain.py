@@ -37,7 +37,7 @@ if __name__ == "__main__":
                 piUpdate(firstID,ballnum)
 
                 waitingtime = GetWaitingTime()
-                print('%d seconds waiting for new data....v200301' %waitingtime)
+                print('%d seconds waiting for new data....v200304' %waitingtime)
                 time.sleep(waitingtime)        
  
 
