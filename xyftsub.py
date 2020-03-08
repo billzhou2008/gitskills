@@ -196,7 +196,7 @@ def SaveDatatoMysql(ballnum,daynum,today_num,lastballnum):
         lastdaynum = lastballnum//1000 #最后一期年月日
         last_num = lastballnum%1000
         daysrange = 365
-        lastID = GetLastIDFromTable('xyft')
+        lastID = lastballnum
         
         for i in range(daysrange):
             

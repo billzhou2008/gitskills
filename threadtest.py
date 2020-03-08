@@ -14,53 +14,53 @@ import threading
 import time
 
 
-def sing(num):
-    for i in range(num):
-        print("sing%d" % i)
-        time.sleep(0.5)
-
-
-def dance(num):
-    for i in range(num):
-        print("dancing%d" % i)
-        time.sleep(0.5)
-
-
-def main():
-    """创建启动线程"""
-    t_sing = threading.Thread(target=sing, args=(5,))
-    t_dance = threading.Thread(target=dance, args=(6, ))
-    t_sing.start()
-    t_dance.start()
-
-
-if __name__ == '__main__':
-    main()
-
-
-if __name__ == "__main__":
-
+def GetDataSavetoMysql(statusflag):
     while True:
             
             lastballnum = GetLastIDFromTable('xyft')
             ballnum,daynum,today_num = GetIDAccordingCurentTime()
 
             #print(ballnum,lastballnum)
-            
-            
+                        
             if(ballnum > lastballnum):
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
                 numberdiff = ballnum - lastballnum
                 if(numberdiff > 3):
                     ContinueCheck(lastballnum,ballnum,"xyft") # added by zhoumb 2020020
-            else:
-                firstID = GetLastIDFromTable('xyftrd')
-                if(ballnum >firstID):
-                    rdUpdate(firstID,ballnum)
 
+
+            waitingtime = GetWaitingTime()
+            print('%d seconds waiting for new data....' %waitingtime)
+            time.sleep(waitingtime) 
+
+
+def UpdateSeriesDisplay(statusflag):
+    while True:
+            ballnum = GetLastIDFromTable('xyft')
+            firstID = GetLastIDFromTable('xyftrd')
+            updateflag = 0
+            if(ballnum >firstID):
+                rdUpdate(firstID,ballnum)
                 firstID = GetLastIDFromTable('xyftpi')
                 piUpdate(firstID,ballnum)
-
+                updateflag = 1
+            
+            if(updateflag == 1):
                 waitingtime = GetWaitingTime()
-                print('%d seconds waiting for new data....' %waitingtime)
-                time.sleep(waitingtime)     
+                print('%d seconds waiting for series update....v20200308' %waitingtime)
+            else:
+                waitingtime = 30
+                print('Data not update, %d seconds waiting')
+            time.sleep(waitingtime) 
+
+
+def main():
+    """创建启动线程"""
+    t_get_save = threading.Thread(target=GetDataSavetoMysql, args=(1,))
+    t_update = threading.Thread(target=UpdateSeriesDisplay, args=(1, ))
+    t_get_save.start()
+    t_update.start()
+
+
+if __name__ == '__main__':
+    main()

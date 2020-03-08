@@ -1,4 +1,4 @@
-8# -*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 #-*-author by Zhoumb 2018-----------------------
 
 from xyftsub import SaveDatatoMysql
