@@ -28,45 +28,73 @@ def GetDataSavetoMysql(statusflag):
             if(ballnum > lastballnum):
                 g_flag = 1 
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
-
-            g_flag = 0
+                g_flag = 0
+            
             waitingtime = GetWaitingTime()
             print('%d seconds waiting for new data....' %waitingtime)
             time.sleep(waitingtime) 
 
 
-def UpdateSeriesDisplay(statusflag):
+def UpdateCalData(statusflag):
     global g_flag
     while True:
             ballnum = GetLastIDFromTable('xyft')
             firstID = GetLastIDFromTable('xyftrd')
-            updateflag = 0
-            if(ballnum >firstID and g_flag == 0):
-                ContinueCheck(firstID,ballnum,"xyft") # added by zhoumb 2020020
-                rdUpdate(firstID,ballnum)
-                firstID = GetLastIDFromTable('xyftpi')
-                piUpdate(firstID,ballnum)
+            if(ballnum>firstID):
                 updateflag = 1
             else:
                 updateflag = 0
-            
-            if(updateflag == 1):
+
+            if(updateflag == 1 and g_flag == 0):
+                g_flag = 2
+                ContinueCheck(firstID,ballnum,"xyft") # added by zhoumb 2020020
+                rdUpdate(firstID,ballnum)
+                g_flag = 0
+                updateflag = 0
+
+            if(updateflag == 0):
                 waitingtime = GetWaitingTime()
-                print('%d seconds waiting for series update....v20200308' %waitingtime)
+                print('%d seconds waiting for calculate rd update....v20200308' %waitingtime)
             else:
-                waitingtime = 30
+                waitingtime = 15
                 print('Data not update, %d seconds waiting' %waitingtime)
                 if(g_flag == 1):
                     print('Get data processing,waiting')
             time.sleep(waitingtime) 
 
 
+def DisplayUpdate(statusflag):
+    global g_flag
+    while True:
+        if(g_flag == 0):
+            ballnum = GetLastIDFromTable('xyft')
+            firstID = GetLastIDFromTable('xyftpi')
+            piUpdate(firstID,ballnum)
+            waitingtime = GetWaitingTime()
+            print('%d seconds waiting for display update....v20200308' %waitingtime)
+        else:
+            waitingtime = 15
+            if(g_flag == 1):
+                print('Get data processing,waiting %d seconds' %waitingtime)
+            if(g_flag == 2):
+                print('Calculate rdtable processing,waiting %d seconds' %waitingtime)
+        
+        time.sleep(waitingtime) 
+            
+
 def main():
     """创建启动线程"""
     t_get_save = threading.Thread(target=GetDataSavetoMysql, args=(1,))
-    t_update = threading.Thread(target=UpdateSeriesDisplay, args=(1, ))
+    t_updatecal = threading.Thread(target=UpdateCalData, args=(1, ))
+    t_display = threading.Thread(target=DisplayUpdate, args=(1, ))
+
     t_get_save.start()
-    t_update.start()
+    time.sleep(3)
+    
+    t_updatecal.start()
+    time.sleep(3)
+    
+    t_display.start()
 
 
 if __name__ == '__main__':

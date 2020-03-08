@@ -1,0 +1,15 @@
+
+__pycache__/threadtest.cpython-36.pyc
+*.pyc
+*.pyc
+build/threadtest/PYZ-00.pyz
+*.toc
+__pycache__/xyftsub.cpython-36.pyc
+*.zip
+build/threadtest/threadtest.exe.manifest
+*.exe
+*.spec
+build/threadtest/xref-threadtest.html
+build/threadtest/warn-threadtest.txt
+build/threadtest/PKG-00.pkg
+__pycache__/xyftsub.cpython-36.pyc
