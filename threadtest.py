@@ -22,13 +22,14 @@ def GetDataSavetoMysql(statusflag):
             
             lastballnum = GetLastIDFromTable('xyft')
             ballnum,daynum,today_num = GetIDAccordingCurentTime()
+             
 
             #print(ballnum,lastballnum)
                         
             if(ballnum > lastballnum):
-                g_flag = 1 
+                g_flag = 1
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
-                g_flag = 0
+                g_flag = 2
             
             waitingtime = GetWaitingTime()
             print('%d seconds waiting for new data....' %waitingtime)
@@ -38,19 +39,19 @@ def GetDataSavetoMysql(statusflag):
 def UpdateCalData(statusflag):
     global g_flag
     while True:
-            ballnum = GetLastIDFromTable('xyft')
+            ballnum,daynum,today_num = GetIDAccordingCurentTime()
             firstID = GetLastIDFromTable('xyftrd')
             if(ballnum>firstID):
                 updateflag = 1
             else:
                 updateflag = 0
+                g_flag = 3
 
-            if(updateflag == 1 and g_flag == 0):
-                g_flag = 2
+            if(updateflag == 1 and g_flag == 2):
                 ContinueCheck(firstID,ballnum,"xyft") # added by zhoumb 2020020
                 rdUpdate(firstID,ballnum)
-                g_flag = 0
                 updateflag = 0
+                g_flag = 3
 
             if(updateflag == 0):
                 waitingtime = GetWaitingTime()
@@ -66,10 +67,11 @@ def UpdateCalData(statusflag):
 def DisplayUpdate(statusflag):
     global g_flag
     while True:
-        if(g_flag == 0):
+        if(g_flag == 3):
             ballnum = GetLastIDFromTable('xyft')
             firstID = GetLastIDFromTable('xyftpi')
             piUpdate(firstID,ballnum)
+            g_flag =0
             waitingtime = GetWaitingTime()
             print('%d seconds waiting for display update....v20200308' %waitingtime)
         else:
