@@ -13,8 +13,11 @@ from xyftsub import ContinueCheck # added by zhoumb 20200201
 import threading
 import time
 
+g_flag = 0
 
 def GetDataSavetoMysql(statusflag):
+    global g_flag
+
     while True:
             
             lastballnum = GetLastIDFromTable('xyft')
@@ -23,34 +26,38 @@ def GetDataSavetoMysql(statusflag):
             #print(ballnum,lastballnum)
                         
             if(ballnum > lastballnum):
+                g_flag = 1 
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
-                numberdiff = ballnum - lastballnum
-                if(numberdiff > 3):
-                    ContinueCheck(lastballnum,ballnum,"xyft") # added by zhoumb 2020020
 
-
+            g_flag = 0
             waitingtime = GetWaitingTime()
             print('%d seconds waiting for new data....' %waitingtime)
             time.sleep(waitingtime) 
 
 
 def UpdateSeriesDisplay(statusflag):
+    global g_flag
     while True:
             ballnum = GetLastIDFromTable('xyft')
             firstID = GetLastIDFromTable('xyftrd')
             updateflag = 0
-            if(ballnum >firstID):
+            if(ballnum >firstID and g_flag == 0):
+                ContinueCheck(firstID,ballnum,"xyft") # added by zhoumb 2020020
                 rdUpdate(firstID,ballnum)
                 firstID = GetLastIDFromTable('xyftpi')
                 piUpdate(firstID,ballnum)
                 updateflag = 1
+            else:
+                updateflag = 0
             
             if(updateflag == 1):
                 waitingtime = GetWaitingTime()
                 print('%d seconds waiting for series update....v20200308' %waitingtime)
             else:
                 waitingtime = 30
-                print('Data not update, %d seconds waiting')
+                print('Data not update, %d seconds waiting' %waitingtime)
+                if(g_flag == 1):
+                    print('Get data processing,waiting')
             time.sleep(waitingtime) 
 
 
