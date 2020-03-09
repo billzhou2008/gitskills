@@ -9,6 +9,7 @@ from xyftsub import piUpdate
 from xyftsub import GetWaitingTime
 from xyftsub import piLatestDataDisp #zhoumb180723
 from xyftsub import ContinueCheck # added by zhoumb 20200201
+from xyftsub import CalNumDiff #zhoumb200309
 
 import threading
 import time
@@ -41,6 +42,9 @@ def UpdateCalData(statusflag):
     while True:
             ballnum,daynum,today_num = GetIDAccordingCurentTime()
             firstID = GetLastIDFromTable('xyftrd')
+            numberdiff = CalNumDiff(firstID,ballnum)
+            print(numberdiff,ballnum,firstID)
+
             if(ballnum>firstID):
                 updateflag = 1
             else:
@@ -48,7 +52,8 @@ def UpdateCalData(statusflag):
                 g_flag = 3
 
             if(updateflag == 1 and g_flag == 2):
-                ContinueCheck(firstID,ballnum,"xyft") # added by zhoumb 2020020
+                if(numberdiff > 5):
+                    ContinueCheck(firstID,ballnum,"xyft") # added by zhoumb 2020020
                 rdUpdate(firstID,ballnum)
                 updateflag = 0
                 g_flag = 3
@@ -57,7 +62,7 @@ def UpdateCalData(statusflag):
                 waitingtime = GetWaitingTime()
                 print('%d seconds waiting for calculate rd update....v20200308' %waitingtime)
             else:
-                waitingtime = 15
+                waitingtime = 5
                 print('Data not update, %d seconds waiting' %waitingtime)
                 if(g_flag == 1):
                     print('Get data processing,waiting')
@@ -75,7 +80,7 @@ def DisplayUpdate(statusflag):
             waitingtime = GetWaitingTime()
             print('%d seconds waiting for display update....v20200308' %waitingtime)
         else:
-            waitingtime = 15
+            waitingtime = 5
             if(g_flag == 1):
                 print('Get data processing,waiting %d seconds' %waitingtime)
             if(g_flag == 2):

@@ -455,6 +455,15 @@ def DTJudge(num1,num2,numDT):
         if numDT > 0: numDT = -1
         else: numDT = numDT-1
     return numDT
+def CalNumDiff(ID1,ID2):
+        date1 = GetDateFromID(ID1)
+        date2 = GetDateFromID(ID2)
+        datediff = date2 - date1
+        number1 = ID1%1000
+        number2 = ID2%1000
+        numberdiff = int(datediff.days) * 180 + number2 - number1
+
+        return (numberdiff)
 
 def GetDateFromID(ID):
         
@@ -1277,7 +1286,7 @@ def GetWaitingTime(): #by zhoumb 2018-06-01
     if(currenthour>4 and currenthour<13):
             waitingtime = 500
             
-    
+    waitingtime += 10 # diff for two computers zhoumb20200309
     return(waitingtime)
 
 def SeqValueDisp(ID,position,numbers):
