@@ -456,14 +456,30 @@ def DTJudge(num1,num2,numDT):
         else: numDT = numDT-1
     return numDT
 def CalNumDiff(ID1,ID2):
-        date1 = GetDateFromID(ID1)
-        date2 = GetDateFromID(ID2)
+        date1 = GetDateFromIDforCalNumDiff(ID1)
+        date2 = GetDateFromIDforCalNumDiff(ID2)
         datediff = date2 - date1
         number1 = ID1%1000
         number2 = ID2%1000
         numberdiff = int(datediff.days) * 180 + number2 - number1
 
         return (numberdiff)
+def GetDateFromIDforCalNumDiff(ID): #zhoumb20200311
+        
+        temp = ID//10000000
+        year = temp
+
+        temp = ID%10000000
+        temp = temp//100000
+        month =  temp
+
+        temp = ID%100000
+        day = temp//1000
+
+        number = ID%1000
+
+        date = datetime.date(year, month, day)
+        return(date)
 
 def GetDateFromID(ID):
         
