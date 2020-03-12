@@ -60,7 +60,7 @@ def UpdateCalData(statusflag):
 
             if(updateflag == 0):
                 waitingtime = GetWaitingTime()
-                print('%d seconds waiting for calculate rd update....v20200308' %waitingtime)
+                print('%d seconds waiting RD clac....v20200308' %waitingtime)
             else:
                 waitingtime = 5
                 print('Data not update, %d seconds waiting' %waitingtime)
@@ -78,7 +78,7 @@ def DisplayUpdate(statusflag):
             piUpdate(firstID,ballnum)
             g_flag =0
             waitingtime = GetWaitingTime()
-            print('%d seconds waiting for display update....v20200308' %waitingtime)
+            print('%d seconds waiting for display update....v20200311' %waitingtime)
         else:
             waitingtime = 5
             if(g_flag == 1):
