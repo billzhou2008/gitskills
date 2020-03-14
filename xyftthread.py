@@ -32,7 +32,14 @@ def GetDataSavetoMysql(statusflag):
                 SaveDatatoMysql(ballnum,daynum,today_num,lastballnum)
                 g_flag = 2
             
-            waitingtime = GetWaitingTime()
+            lastballnum = GetLastIDFromTable('xyft')
+            if(ballnum > lastballnum):
+                g_flag = 1
+                waitingtime = 10
+                print('data not update in Getdata')
+            else:
+                waitingtime = GetWaitingTime()
+
             print('%d seconds waiting for new data....' %waitingtime)
             time.sleep(waitingtime) 
 
@@ -62,7 +69,7 @@ def UpdateCalData(statusflag):
                 waitingtime = GetWaitingTime()
                 print('%d seconds waiting RD clac....v20200308' %waitingtime)
             else:
-                waitingtime = 5
+                waitingtime = 10
                 print('Data not update, %d seconds waiting' %waitingtime)
                 if(g_flag == 1):
                     print('Get data processing,waiting')
@@ -80,7 +87,7 @@ def DisplayUpdate(statusflag):
             waitingtime = GetWaitingTime()
             print('%d seconds waiting for display update....v20200311' %waitingtime)
         else:
-            waitingtime = 5
+            waitingtime = 10
             if(g_flag == 1):
                 print('Get data processing,waiting %d seconds' %waitingtime)
             if(g_flag == 2):
